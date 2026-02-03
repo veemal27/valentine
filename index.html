@@ -7,8 +7,9 @@
 
 <style>
   body {
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,7 +17,27 @@
     background: linear-gradient(135deg, #ff9a9e, #fad0c4);
     font-family: system-ui, Arial, sans-serif;
     text-align: center;
-    overflow: hidden;
+    overflow-x: hidden;
+  }
+
+  /* VIDEO AREA (TOP) */
+  .video-area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+    min-height: 180px; /* keeps layout stable */
+  }
+
+  .top-video {
+    width: 260px;
+    max-width: 90vw;
+    border-radius: 18px;
+    display: none;
+    background: transparent;
+    object-fit: cover;
+    box-shadow: 0 14px 35px rgba(0,0,0,0.25);
+    animation: fadeIn 0.4s ease-in-out;
   }
 
   h1 {
@@ -51,37 +72,44 @@
     top: 55%;
   }
 
-  /* CENTERED VIDEO (NO BORDER, BIGGER) */
-  .side-video {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 240px;           /* bigger size */
-    max-width: 85vw;        /* mobile safe */
-    border-radius: 18px;
-    display: none;
-    background: transparent;
-    border: none;
-    outline: none;
-    object-fit: cover;
-    box-shadow: 0 14px 35px rgba(0,0,0,0.25);
-    animation: fadeIn 0.4s ease-in-out;
-  }
-
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translate(-50%, -50%) scale(0.9);
+      transform: scale(0.9);
     }
     to {
       opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
+      transform: scale(1);
     }
   }
 </style>
 </head>
 <body>
+
+<!-- VIDEO GOES HERE (ABOVE TEXT) -->
+<div class="video-area">
+  <video
+    id="noVideo"
+    class="top-video"
+    muted
+    loop
+    playsinline
+    webkit-playsinline
+  >
+    <source src="no.mp4" type="video/mp4">
+  </video>
+
+  <video
+    id="yesVideo"
+    class="top-video"
+    muted
+    loop
+    playsinline
+    webkit-playsinline
+  >
+    <source src="yes.mp4" type="video/mp4">
+  </video>
+</div>
 
 <h1 id="question">Will you be my Valentine? 💖</h1>
 
@@ -90,36 +118,13 @@
   <button id="no">No 🙄</button>
 </div>
 
-<!-- Video when clicking No -->
-<video
-  id="noVideo"
-  class="side-video"
-  muted
-  loop
-  playsinline
-  webkit-playsinline
->
-  <source src="no.mp4" type="video/mp4">
-</video>
-
-<!-- Video after Yes -->
-<video
-  id="yesVideo"
-  class="side-video"
-  muted
-  loop
-  playsinline
-  webkit-playsinline
->
-  <source src="yes.mp4" type="video/mp4">
-</video>
-
 <script>
   const noBtn = document.getElementById("no");
   const yesBtn = document.getElementById("yes");
   const container = document.querySelector(".container");
   const noVideo = document.getElementById("noVideo");
   const yesVideo = document.getElementById("yesVideo");
+  const question = document.getElementById("question");
 
   function moveNoButton() {
     const c = container.getBoundingClientRect();
@@ -131,16 +136,20 @@
     noBtn.style.left = `${x}px`;
     noBtn.style.top = `${y}px`;
 
+    if (yesVideo.style.display === "block") {
+      yesVideo.pause();
+      yesVideo.style.display = "none";
+    }
+
     noVideo.style.display = "block";
     noVideo.play();
   }
 
-  // Works for mouse + touch
   noBtn.addEventListener("pointerenter", moveNoButton);
   noBtn.addEventListener("touchstart", moveNoButton);
 
   yesBtn.addEventListener("click", () => {
-    document.getElementById("question").innerHTML = "YAYYYY 💘🥰";
+    question.innerHTML = "YAYYYY 💘🥰";
     document.getElementById("buttons").style.display = "none";
 
     noVideo.pause();
