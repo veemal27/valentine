@@ -20,13 +20,13 @@
     overflow-x: hidden;
   }
 
-  /* VIDEO AREA (TOP) */
+  /* VIDEO AREA */
   .video-area {
     width: 100%;
     display: flex;
     justify-content: center;
     margin-bottom: 16px;
-    min-height: 180px; /* keeps layout stable */
+    min-height: 180px;
   }
 
   .top-video {
@@ -42,6 +42,12 @@
 
   h1 {
     font-size: 1.8rem;
+    margin-bottom: 16px;
+  }
+
+  .subtext {
+    font-size: 0.95rem;
+    opacity: 0.85;
     margin-bottom: 20px;
   }
 
@@ -86,7 +92,7 @@
 </head>
 <body>
 
-<!-- VIDEO GOES HERE (ABOVE TEXT) -->
+<!-- VIDEO -->
 <div class="video-area">
   <video
     id="noVideo"
@@ -111,7 +117,9 @@
   </video>
 </div>
 
+<!-- PAGE 1 TEXT -->
 <h1 id="question">Will you be my Valentine? 💖</h1>
+<div id="hint" class="subtext">Go on… try clicking <b>No</b> 😏</div>
 
 <div class="container" id="buttons">
   <button id="yes">Yes 😍</button>
@@ -125,6 +133,7 @@
   const noVideo = document.getElementById("noVideo");
   const yesVideo = document.getElementById("yesVideo");
   const question = document.getElementById("question");
+  const hint = document.getElementById("hint");
 
   function moveNoButton() {
     const c = container.getBoundingClientRect();
@@ -136,10 +145,8 @@
     noBtn.style.left = `${x}px`;
     noBtn.style.top = `${y}px`;
 
-    if (yesVideo.style.display === "block") {
-      yesVideo.pause();
-      yesVideo.style.display = "none";
-    }
+    yesVideo.pause();
+    yesVideo.style.display = "none";
 
     noVideo.style.display = "block";
     noVideo.play();
@@ -149,9 +156,12 @@
   noBtn.addEventListener("touchstart", moveNoButton);
 
   yesBtn.addEventListener("click", () => {
-    question.innerHTML = "YAYYYY 💘🥰";
+    // Change text
+    question.innerHTML = "You passed the test 😘<br>It’s a yes for me too. ❤️";
+    hint.style.display = "none";
     document.getElementById("buttons").style.display = "none";
 
+    // Switch videos
     noVideo.pause();
     noVideo.style.display = "none";
 
